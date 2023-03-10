@@ -167,14 +167,10 @@ public class LibrarySystem extends JFrame implements LibWindow {
     }
     
 	void updateList() {
-		MenuItem[] items = (MenuItem[])options.getMenuComponents();
-		if (items != null) {
-			for (MenuItem item: items) {
-				if (item != null) {
-					item.setHighlight(SystemController.currentAuth);
-				}
-			}
-		}
+		login.setHighlight(SystemController.currentAuth);
+		allBookIds.setHighlight(SystemController.currentAuth);
+		allMemberIds.setHighlight(SystemController.currentAuth);
+		repaint();
 	}
 
 	@Override

@@ -15,6 +15,7 @@ public class MenuItem extends JMenuItem {
 	   highlight = defaultHighlist;
 	   this.visibleTo = visibileTo;
 	   menuItem = new JMenuItem(item);
+	   menuItem.setEnabled(defaultHighlist);
     }
 	@Override
 	public boolean equals(Object ob) {
@@ -35,14 +36,16 @@ public class MenuItem extends JMenuItem {
 		this.itemName = itemName;
 	}
 	public void setHighlight(Auth auth) {
-		if(visibleTo == null) return;
-		if(auth != null) {
-			this.highlight = auth == visibleTo;
+		if (visibleTo != null) {
+			if(auth != null) {
+				this.highlight = auth == Auth.BOTH ? true : auth == visibleTo;
+			}
+			else {
+				this.highlight = false;
+			}
+			
+			menuItem.setEnabled(this.highlight);
 		}
-		else {
-			this.highlight = false;
-		}
-		setEnabled(this.highlight);
 	}
 	
 
