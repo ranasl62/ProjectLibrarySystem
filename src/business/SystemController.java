@@ -16,14 +16,14 @@ public class SystemController implements ControllerInterface {
         DataAccess da = new DataAccessFacade();
         HashMap<String, User> map = da.readUserMap();
         if (!map.containsKey(id)) {
-            throw new LoginException("ID " + id + " not found");
+            throw new LoginException("Username " + id + " not found");
         }
         String passwordFound = map.get(id).getPassword();
+
         if (!passwordFound.equals(password)) {
             throw new LoginException("Password incorrect");
         }
         currentAuth = map.get(id).getAuthorization();
-
     }
 
     @Override

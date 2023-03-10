@@ -38,7 +38,7 @@ public class MenuItem extends JMenuItem {
 	public void setHighlight(Auth auth) {
 		if (visibleTo != null) {
 			if(auth != null) {
-				this.highlight = auth == Auth.BOTH ? true : auth == visibleTo;
+				this.highlight = visibleTo == Auth.BOTH ? true : auth == visibleTo;
 			}
 			else {
 				this.highlight = false;
