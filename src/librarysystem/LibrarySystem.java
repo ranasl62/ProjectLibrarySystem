@@ -94,9 +94,9 @@ public class LibrarySystem extends JFrame implements LibWindow {
 		menuBar.add(options);
 		login = new MenuItem("Login", null, true); // null -> visible for all
 		login.getItem().addActionListener(new LoginListener());
-		allBookIds = new MenuItem("All Book Ids", Auth.BOTH, false);
+		allBookIds = new MenuItem("All Book Ids", Auth.BOTH, true);
 		allBookIds.getItem().addActionListener(new AllBookIdsListener());
-		allMemberIds = new MenuItem("All Member Ids", Auth.BOTH, false);
+		allMemberIds = new MenuItem("All Member Ids", Auth.BOTH, true);
 		allMemberIds.getItem().addActionListener(new AllMemberIdsListener());
 		options.add(login.getItem());
 		options.add(allBookIds.getItem());
