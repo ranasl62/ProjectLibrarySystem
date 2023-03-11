@@ -25,6 +25,7 @@ import javax.swing.table.TableColumn;
 
 import business.ControllerInterface;
 import business.SystemController;
+import dataaccess.Auth;
 
 public class AllMemberIdsWindow extends JFrame implements LibWindow {
 	/**
@@ -81,6 +82,9 @@ public class AllMemberIdsWindow extends JFrame implements LibWindow {
 		topPanel.add(label, BorderLayout.NORTH);
 
 		JButton addMemberButton = new JButton("Add Member");
+		if(SystemController.currentAuth == null || SystemController.currentAuth == Auth.LIBRARIAN) {
+			addMemberButton.setEnabled(false);
+		}
 
 		JPanel buttonPanel = new JPanel();
 
