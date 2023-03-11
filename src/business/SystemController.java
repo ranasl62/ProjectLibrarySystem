@@ -61,6 +61,26 @@ public class SystemController implements ControllerInterface {
 			}
 		}
 	}
+	
+	public void addNewBook(String isbn, String title, int maxLen, int copies, String auths) throws BookException {
+		DataAccess da = new DataAccessFacade();
+		HashMap<String, Book> bookMap = da.readBooksMap();
+		if (bookMap.containsKey(isbn)) {
+			throw new BookException("Book " + isbn + " is already exists!");
+		}
+	
+		List<Author> al = new ArrayList<>();
+		for(String s: auths.split(",")) {
+			al.add(new Author("", "", "", null, s.trim()));
+		}
+		Book book = new Book(isbn, title, maxLen, al);
+		
+		for(int i=0; i<copies; i++) {
+			book.addCopy();
+		}
+
+		da.saveBook(book);
+	}
 
 	@Override
 	public List<String> allMemberIds() {
@@ -82,6 +102,12 @@ public class SystemController implements ControllerInterface {
 	public HashMap<String, LibraryMember> readMemberMap() {
 		DataAccess da = new DataAccessFacade();
 		return da.readMemberMap();
+	}
+	
+	@Override
+	public HashMap<String, Book> readBooksMap() {
+		DataAccess da = new DataAccessFacade();
+		return da.readBooksMap();
 	}
 
 }
