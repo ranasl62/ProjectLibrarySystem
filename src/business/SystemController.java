@@ -1,5 +1,6 @@
 package business;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -16,6 +17,7 @@ public class SystemController implements ControllerInterface {
 	public void login(String id, String password) throws LoginException {
 		DataAccess da = new DataAccessFacade();
 		HashMap<String, User> map = da.readUserMap();
+		System.out.println("All users: " + map);
 		if (!map.containsKey(id)) {
 			throw new LoginException("Username " + id + " not found");
 		}
@@ -25,6 +27,39 @@ public class SystemController implements ControllerInterface {
 			throw new LoginException("Password incorrect");
 		}
 		currentAuth = map.get(id).getAuthorization();
+	}
+
+	public void checkoutBook(String isbn, String memberId) throws CheckoutException {
+		DataAccess da = new DataAccessFacade();
+		HashMap<String, LibraryMember> memberMap = da.readMemberMap();
+		System.out.println("All members: " + memberMap);
+		if (!memberMap.containsKey(memberId)) {
+			throw new CheckoutException("Member Id " + memberId + " not found");
+		}
+
+		LibraryMember member = memberMap.get(memberId);
+
+		HashMap<String, Book> bookMap = da.readBooksMap();
+		System.out.println("All Books: " + bookMap);
+		if (!bookMap.containsKey(isbn)) {
+			throw new CheckoutException("This book is not found!");
+		} else {
+			Book matchedBook = bookMap.get(isbn);
+			if (!matchedBook.isAvailable()) {
+				throw new CheckoutException("This book is not available!");
+			} else {
+				try {
+					BookCopy copy = matchedBook.getNextAvailableCopy();
+					int maxLength = matchedBook.getMaxCheckoutLength();
+
+					member.checkout(copy, LocalDate.now(), LocalDate.now().plusDays(maxLength));
+					da.saveMember(member); // actually updating member
+					da.saveBook(matchedBook);
+				} catch (CheckoutException e) {
+					throw new CheckoutException(e.getMessage());
+				}
+			}
+		}
 	}
 
 	@Override
@@ -43,7 +78,6 @@ public class SystemController implements ControllerInterface {
 		return retval;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public HashMap<String, LibraryMember> readMemberMap() {
 		DataAccess da = new DataAccessFacade();

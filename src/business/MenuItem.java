@@ -10,44 +10,50 @@ public class MenuItem extends JMenuItem {
 	private boolean highlight = false;
 	private Auth visibleTo;
 	private JMenuItem menuItem;
+
 	public MenuItem(String item, Auth visibileTo, boolean defaultHighlist) {
-	   itemName = item;
-	   highlight = defaultHighlist;
-	   this.visibleTo = visibileTo;
-	   menuItem = new JMenuItem(item);
-	   menuItem.setEnabled(defaultHighlist);
-    }
+		itemName = item;
+		highlight = defaultHighlist;
+		this.visibleTo = visibileTo;
+		menuItem = new JMenuItem(item);
+		menuItem.setEnabled(defaultHighlist);
+	}
+
 	@Override
 	public boolean equals(Object ob) {
-		if(ob.getClass() != MenuItem.class) return false;
-		MenuItem item = (MenuItem)ob;
+		if (ob.getClass() != MenuItem.class)
+			return false;
+		MenuItem item = (MenuItem) ob;
 		return itemName.equals(item.itemName);
 	}
+
 	public String getItemName() {
 		return itemName;
 	}
+
 	public JMenuItem getItem() {
 		return menuItem;
 	}
+
 	public boolean highlight() {
 		return highlight;
 	}
+
 	public void setItemName(String itemName) {
 		this.itemName = itemName;
 	}
-	public void setHighlight(Auth auth) {
+
+	public void setHighlight(Auth currentAuth) {
 		if (visibleTo != null) {
-			if(auth != null) {
-				this.highlight = visibleTo == Auth.BOTH ? true : auth == visibleTo;
-			}
-			else {
+			if (currentAuth != null) {
+				this.highlight = (currentAuth == Auth.BOTH || visibleTo == Auth.BOTH) ? true : currentAuth == visibleTo;
+			} else {
 				this.highlight = false;
 			}
-			
+
 			menuItem.setEnabled(this.highlight);
 		}
 	}
-	
 
 	/**
 	 * 
