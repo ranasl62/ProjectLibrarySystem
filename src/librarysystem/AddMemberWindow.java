@@ -1,6 +1,7 @@
 package librarysystem;
 
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 
@@ -110,6 +111,11 @@ public class AddMemberWindow extends JFrame implements LibWindow {
 		// add the button to the last row
 		JButton addButton = new JButton("Add");
 		JPanel buttonPanel = new JPanel();
+		
+		JButton backButton = new JButton("Back");
+		addBackButtonListener(backButton);
+		buttonPanel.add(backButton);
+		
 		buttonPanel.add(addButton);
 		panel.add(new JPanel());
 		panel.add(new JPanel());
@@ -125,6 +131,13 @@ public class AddMemberWindow extends JFrame implements LibWindow {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
 
+	}
+	
+	private void addBackButtonListener(JButton butn) {
+		butn.addActionListener(evt -> {
+			LibrarySystem.hideAllWindows();
+			AllMemberIdsWindow.INSTANCE.setVisible(true);
+		});
 	}
 
 	void addMemberListener(JButton buttonPanel) {

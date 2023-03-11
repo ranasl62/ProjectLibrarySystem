@@ -192,7 +192,6 @@ public class AllMemberIdsWindow extends JFrame implements LibWindow {
 
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 				int row, int column) {
-			System.out.print(value);
 			if (isSelected) {
 				setForeground(table.getSelectionForeground());
 				setBackground(table.getSelectionBackground());
