@@ -10,7 +10,9 @@ import dataaccess.DataAccessFacade;
 public interface ControllerInterface {
 	public void login(String id, String password) throws LoginException;
 
-	public void checkoutBook(String memberId, String isbn) throws CheckoutException;
+    public void checkoutBook(String memberId, String isbn) throws CheckoutException;
+    
+    public void addNewBook(String isbn, String title, int maxLen, int copies, String auths) throws BookException;
 
 	public List<String> allMemberIds();
 
@@ -18,6 +20,7 @@ public interface ControllerInterface {
 
 	public HashMap<String, LibraryMember> readMemberMap();
 	
+	public HashMap<String, Book> readBooksMap();
 	public void saveBook(Book book);
 
 	public void saveMember(LibraryMember libraryMember) throws AddMemberWindowException;

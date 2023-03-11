@@ -1,22 +1,31 @@
 package librarysystem;
 
-import java.awt.*;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ArrayList;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.Timer;
 
-import business.Address;
-import business.Author;
-import business.Book;
+import business.BookException;
+import business.CheckoutException;
 import business.ControllerInterface;
 import business.SystemController;
-import dataaccess.DataAccessFacade;
+import business.rulesets.RuleException;
+import business.rulesets.RuleSet;
+import business.rulesets.RuleSetFactory;
 
+@SuppressWarnings("serial")
 public class AddBookWindow extends JFrame implements LibWindow {
-
 	ControllerInterface ci = new SystemController();
 
 	public static final AddBookWindow INSTANCE = new AddBookWindow();
@@ -24,16 +33,12 @@ public class AddBookWindow extends JFrame implements LibWindow {
 	private boolean isInitialized = false;
 
 	private JPanel panel;
-
-	private JTextField bookTitle;
-	private JTextField bookISBN;
-	private JTextField authorFirstName;
-	private JTextField authorLastName;
-	private JTextField authorTelephone;
-	private JTextField authorStreet;
-	private JTextField authorCity;
-	private JTextField authorState;
-	private JTextField authorZip;
+	
+	private JTextField isbnField;
+	private JTextField titleField;
+	private JTextField maxLenField;
+	private JTextField copiesField;
+	private JTextField authsField;
 
 	public boolean isInitialized() {
 		return isInitialized;
@@ -79,105 +84,138 @@ public class AddBookWindow extends JFrame implements LibWindow {
 		// create the panel and set its layout
 		panel = new JPanel(new GridLayout(0, 3, 10, 10));
 		panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		
+		setTitle("Add A New Book");
 
 		// create the fields and labels
-		bookTitle = createField(10);
-		bookISBN = createField(10);
-		authorFirstName = createField(10);
-		authorLastName = createField(10);
-		authorTelephone = createField(10);
-		authorStreet = createField(10);
-		authorCity = createField(10);
-		authorState = createField(10);
-		authorZip = createField(10);
+		isbnField = createField(10);
+		titleField = createField(10);
+		maxLenField = createField(10);
+		copiesField = createField(20);
+		authsField = createField(10);
 
-		JLabel bookTitleLabel = createLabel("Book Name:");
-		JLabel bookISBNLabel = createLabel("Book ISBN:");
-		JLabel authorFirstNameLabel = createLabel("Author First Name:");
-		JLabel authorLastNameLabel = createLabel("Author Last Name:");
-		JLabel authorTelephoneLabel = createLabel("Author Telephone:");
-		JLabel authorStreetLabel = createLabel("Author Street:");
-		JLabel authorCityLabel = createLabel("Author City:");
-		JLabel authorStateLabel = createLabel("Author State:");
-		JLabel authorZipLabel = createLabel("Author Zip:");
+		JLabel isbn = createLabel("ISBN:");
+		JLabel title = createLabel("Title:");
+		JLabel maxLen = createLabel("Max Length:");
+		JLabel copies = createLabel("Copies:");
+		JLabel auths = createLabel("Authors:");
 
 		// add the fields and labels to the panel
-		addRow(bookTitleLabel, bookTitle);
-		addRow(bookISBNLabel, bookISBN);
-		addRow(authorFirstNameLabel, authorFirstName);
-		addRow(authorLastNameLabel, authorLastName);
-		addRow(authorTelephoneLabel, authorTelephone);
-		addRow(authorStreetLabel, authorStreet);
-		addRow(authorCityLabel, authorCity);
-		addRow(authorStateLabel, authorState);
-		addRow(authorZipLabel, authorZip);
+		addRow(isbn, isbnField);
+		addRow(title, titleField);
+		addRow(maxLen, maxLenField);
+		addRow(copies, copiesField);
+		addRow(auths, authsField);
 
 		// add the button to the last row
 		JButton addButton = new JButton("Add");
-		JButton backButton = new JButton("Back to book list");
-		backButton.addActionListener(e -> {
-			LibrarySystem.hideAllWindows();
-			AllBookIdsWindow.INSTANCE.repaint();
-			AllBookIdsWindow.INSTANCE.setVisible(true);
-		});
-		
-		addButton.addActionListener(e -> {
-			String titleValue = this.bookTitle.getText().trim();
-			String isbnValue = this.bookISBN.getText().trim();
-			String authorFirstNameValue = this.authorFirstName.getText().trim();
-			String authorLastNameValue = this.authorFirstName.getText().trim();
-			String authorTelephoneValue = this.authorFirstName.getText().trim();
-			String authorStreetValue = this.authorFirstName.getText().trim();
-			String authorCityValue = this.authorFirstName.getText().trim();
-			String authorStateValue = this.authorFirstName.getText().trim();
-			String authorZipValue = this.authorFirstName.getText().trim();
-			
-			Address address = new Address(
-					authorStreetValue,
-					authorCityValue,
-					authorStateValue,
-					authorZipValue
-				);
-			
-			Author author = new Author(
-					authorFirstNameValue,
-					authorLastNameValue,
-					authorTelephoneValue,
-					address,
-					""
-				);
-			
-			List<Author> authorList = new ArrayList<Author>();
-			authorList.add(author);
-			
-			Book book = new Book(
-					isbnValue,
-					titleValue,
-					30,
-					authorList
-					);
-			
-			ci.saveBook(book);
-		});
-		
 		JPanel buttonPanel = new JPanel();
-		BorderLayout bl = new BorderLayout();
-		bl.setVgap(50);;
-		buttonPanel.setLayout(bl);
-		buttonPanel.add(addButton, BorderLayout.EAST);
-		buttonPanel.add(backButton, BorderLayout.WEST);
+		
+		JButton backButton = new JButton("Back");
+		addBackButtonListener(backButton);
+		buttonPanel.add(backButton);
+		
+		buttonPanel.add(addButton);
 		panel.add(new JPanel());
 		panel.add(new JPanel());
 		panel.add(buttonPanel);
+		addBookListener(addButton);
 
 		// add the panel to the frame
 		add(panel);
 
 		// set frame properties
-		setSize(800, 400);
+		setSize(600, 400);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
+
+	}
+	
+	private void addBackButtonListener(JButton butn) {
+		butn.addActionListener(evt -> {
+			LibrarySystem.hideAllWindows();
+			AllBookIdsWindow.INSTANCE.setVisible(true);
+		});
 	}
 
+	void addBookListener(JButton buttonPanel) {
+		buttonPanel.addActionListener(evt -> {
+			String isbn = isbnField.getText();
+			String title = titleField.getText();
+			String maxLen = maxLenField.getText();
+			String copies = copiesField.getText();
+			String auths = authsField.getText();
+
+			try {
+				RuleSet rules = RuleSetFactory.getRuleSet(AddBookWindow.this);
+				rules.applyRules(AddBookWindow.this);
+				addBook(isbn, title, maxLen, copies, auths);
+			} catch (RuleException e) {
+				JOptionPane.showMessageDialog(AddBookWindow.this, e.getMessage());
+			}
+		});
+	}
+	
+	private void addBook(String isbn, String title, String maxLen, String copies, String auths) {
+		try {
+			ci.addNewBook(isbn, title, Integer.parseInt(maxLen), Integer.parseInt(copies), auths);
+			String output = "Book added Successfully!";
+			clearFields();
+			JOptionPane.showMessageDialog(this, output);
+			LibrarySystem.hideAllWindows();
+			
+			Timer timer = new javax.swing.Timer(500, (ActionListener) new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					AddBookWindow.INSTANCE.setVisible(false);
+					AllBookIdsWindow.INSTANCE.init();
+					AllBookIdsWindow.INSTANCE.setVisible(true);
+					Util.centerFrameOnDesktop(AllBookIdsWindow.INSTANCE);
+					repaint();
+					dispose();
+					revalidate();
+				}
+			});
+			timer.setRepeats(false);
+			timer.start();
+			System.out.println(ci.allBookIds());
+			AllBookIdsWindow.INSTANCE.init();
+			AllBookIdsWindow.INSTANCE.setData();
+			AllBookIdsWindow.INSTANCE.setVisible(true);
+			AddBookWindow.INSTANCE.setVisible(false);
+			repaint();
+
+		} catch (BookException e) {
+			JOptionPane.showMessageDialog(AddBookWindow.this, e.getMessage());
+		}
+	}
+	
+	public String getIsbn() {
+		return isbnField.getText();
+	}
+	
+	public String getTitle() {
+		return titleField.getText();
+	}
+	
+	public String getMaxLength() {
+		return maxLenField.getText();
+	}
+	
+	public String getCopies() {
+		return copiesField.getText();
+	}
+	
+	public String getAuths() {
+		return authsField.getText();
+	}
+	
+	private void clearFields() {
+		isbnField.setText("");
+		titleField.setText("");
+		maxLenField.setText("");
+		copiesField.setText("");
+		authsField.setText("");
+
+	}
 }

@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -25,6 +26,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.UIManager;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -56,7 +58,7 @@ public class BookHistoryWindow extends JFrame implements LibWindow {
 	private DefaultTableModel tableModel;
 	private JTable table;
 	private Book book;
-	private List<LibraryMember> libraryMember;
+	private Collection<LibraryMember> libraryMember;
 
 	private BookHistoryWindow() {
 	}
@@ -76,7 +78,7 @@ public class BookHistoryWindow extends JFrame implements LibWindow {
 
 	public void setId(String id) {
 		this.book = ci.readBook(id);
-		this.libraryMember = (List<LibraryMember>) ci.readMemberMap().values();
+		this.libraryMember = ci.readMemberMap().values();
 	}
 
 	public void defineTopPanel() {
@@ -116,7 +118,7 @@ public class BookHistoryWindow extends JFrame implements LibWindow {
 	private void addBackButtonListener(JButton butn) {
 		butn.addActionListener(evt -> {
 			LibrarySystem.hideAllWindows();
-			AllMemberIdsWindow.INSTANCE.setVisible(true);
+			AllBookIdsWindow.INSTANCE.setVisible(true);
 		});
 	}
 
@@ -143,12 +145,63 @@ public class BookHistoryWindow extends JFrame implements LibWindow {
 		}
 
 		for (LibraryMember libMem : this.libraryMember) {
-			for (CheckoutRecordEntry cre : libMem.getEntries()) {
 
-				Object[] obj = { libMem.getFirstName() + " " + libMem.getLastName(), cre.getBookCopy().getCopyNum(),
-						cre.getCheckoutDate(), cre.getDueDate() };
-				this.tableModel.addRow(obj);
+			try {
+				for (CheckoutRecordEntry cre : libMem.getEntries()) {
+					try {
+						if (this.book.getIsbn().equals(cre.getBookCopy().getBook().getIsbn())
+								&& !cre.getBookCopy().isAvailable()) {
+							Object[] obj = { libMem.getFirstName() + " " + libMem.getLastName(),
+									cre.getBookCopy().getCopyNum(), cre.getCheckoutDate(), cre.getDueDate() };
+							this.tableModel.addRow(obj);
+
+							this.tableModel.addRow(obj);
+
+							if (cre.getDueDate().isBefore(LocalDate.now())) {
+								// Get the index of the newly added row
+								int rowIndex = this.tableModel.getRowCount() - 1;
+								Color rowColor = Color.ORANGE;
+								TableCellRenderer cellRenderer = new CustomTableCellRenderer(rowIndex, rowColor);
+
+								for (int i = 0; i < table.getColumnCount(); i++) {
+									table.getColumnModel().getColumn(i).setCellRenderer(cellRenderer);
+								}
+							}
+							// Set the color of the newly added row
+
+						}
+					} catch (Exception e) {
+
+					}
+				}
+			} catch (Exception e) {
+
 			}
+		}
+	}
+
+	public class CustomTableCellRenderer extends DefaultTableCellRenderer {
+		private final int rowIndex;
+		private final Color rowColor;
+
+		public CustomTableCellRenderer(int rowIndex, Color rowColor) {
+			this.rowIndex = rowIndex;
+			this.rowColor = rowColor;
+		}
+
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+				int row, int column) {
+			Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+			// Check the row index and set the background color accordingly
+			if (row == rowIndex) {
+				component.setBackground(rowColor);
+			} else {
+				component.setBackground(table.getBackground());
+			}
+
+			return component;
 		}
 	}
 

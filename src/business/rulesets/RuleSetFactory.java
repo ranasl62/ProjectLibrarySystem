@@ -4,6 +4,7 @@ import java.awt.Component;
 
 import java.util.HashMap;
 
+import librarysystem.AddBookWindow;
 import librarysystem.AddMemberWindow;
 import librarysystem.CheckoutABookWindow;
 import librarysystem.LoginWindow;
@@ -16,6 +17,8 @@ final public class RuleSetFactory {
 		map.put(LoginWindow.class, new LoginRuleSet());
 		map.put(AddMemberWindow.class, new AddMemberRuleSet());
 		map.put(CheckoutABookWindow.class, new CheckoutRuleSet());
+		map.put(AddBookWindow.class, new BookRuleSet());
+
 	}
 	public static RuleSet getRuleSet(Component c) {
 		Class<? extends Component> cl = c.getClass();
