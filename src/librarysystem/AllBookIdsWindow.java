@@ -62,17 +62,22 @@ public class AllBookIdsWindow extends JFrame implements LibWindow {
         textArea = new TextArea(8, 20);
         //populateTextArea();
         middlePanel.add(textArea);
-
     }
 
     public void defineLowerPanel() {
 
-        JButton backToMainButn = new JButton("<= Back to Main");
-        backToMainButn.addActionListener(new BackToMainListener());
+    	JButton addNewBookButton = new JButton("Add new book");
+        JButton backToMainButton = new JButton("<= Back to Main");
+        backToMainButton.addActionListener(new BackToMainListener());
+        addNewBookButton.addActionListener(e -> {
+        	LibrarySystem.hideAllWindows();
+        	AddBookWindow.INSTANCE.init();
+        	AddBookWindow.INSTANCE.setVisible(true);
+        });
         lowerPanel = new JPanel();
-        lowerPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        ;
-        lowerPanel.add(backToMainButn);
+        lowerPanel.setLayout(new BorderLayout());
+        lowerPanel.add(addNewBookButton, BorderLayout.NORTH);
+        lowerPanel.add(backToMainButton, BorderLayout.SOUTH);
     }
 
     class BackToMainListener implements ActionListener {

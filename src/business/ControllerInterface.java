@@ -17,6 +17,8 @@ public interface ControllerInterface {
 	public List<String> allBookIds();
 
 	public HashMap<String, LibraryMember> readMemberMap();
+	
+	public void saveBook(Book book);
 
 	public void saveMember(LibraryMember libraryMember) throws AddMemberWindowException;
 
