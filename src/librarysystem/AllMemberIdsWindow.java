@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
@@ -41,6 +42,7 @@ public class AllMemberIdsWindow extends JFrame implements LibWindow {
 	private JPanel mainPanel;
 	private JPanel topPanel;
 	private JPanel middlePanel;
+	private JPanel addMemberPanel;
 	private JPanel lowerPanel;
 	private DefaultTableModel tableModel;
 	private JTable table;
@@ -62,14 +64,46 @@ public class AllMemberIdsWindow extends JFrame implements LibWindow {
 	}
 
 	public void defineTopPanel() {
+
 		topPanel = new JPanel();
-		JLabel AllIDsLabel = new JLabel("All Member IDs");
+		JLabel AllIDsLabel = new JLabel("Member List");
+		Font labelFont = AllIDsLabel.getFont();
+		AllIDsLabel.setFont(new Font(labelFont.getName(), Font.PLAIN, 18));
+
 		Util.adjustLabelFont(AllIDsLabel, Util.DARK_BLUE, true);
-		topPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-		topPanel.add(AllIDsLabel);
+
+		topPanel.setLayout(new BorderLayout());
+
+		JPanel label = new JPanel();
+
+		label.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 10));
+		label.add(AllIDsLabel);
+		topPanel.add(label, BorderLayout.NORTH);
+
+		JButton addMemberButton = new JButton("Add Member");
+
+		JPanel buttonPanel = new JPanel();
+
+		buttonPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 25, 0));
+		buttonPanel.add(addMemberButton);
+
+		addMemberButtonListener(addMemberButton);
+		topPanel.add(buttonPanel, BorderLayout.SOUTH);
+
 	}
 
+	public void addMemberButtonListener(JButton butn) {
+		butn.addActionListener(evt -> {
+			LibrarySystem.hideAllWindows();
+			AddMemberWindow.INSTANCE.init();
+			Util.centerFrameOnDesktop(AddMemberWindow.INSTANCE);
+			AddMemberWindow.INSTANCE.setVisible(true);
+			System.out.println("Member");
+		});
+	}	
+
 	public void defineMiddlePanel() {
+
 		middlePanel = new JPanel();
 		FlowLayout fl = new FlowLayout(FlowLayout.CENTER, 25, 25);
 		middlePanel.setLayout(fl);
@@ -89,7 +123,7 @@ public class AllMemberIdsWindow extends JFrame implements LibWindow {
 		lowerPanel = new JPanel();
 		FlowLayout fl = new FlowLayout(FlowLayout.LEFT);
 		lowerPanel.setLayout(fl);
-		JButton backButton = new JButton("<= Back");
+		JButton backButton = new JButton("Back");
 		addBackButtonListener(backButton);
 		lowerPanel.add(backButton);
 	}
@@ -126,20 +160,10 @@ public class AllMemberIdsWindow extends JFrame implements LibWindow {
 
 		// Add rows to the table model
 		for (Object[] row : data) {
-			// Create a button for each row
-			JButton viewButton = new JButton("View");
-			viewButton.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					// Handle button click event
-					// You can use the `row` variable to access the data for this row
-					System.out.println("View button clicked for row: " + Arrays.toString(row));
-				}
-			});
 
 			// Add the button to the last column of this row
 			Object[] rowWithButton = Arrays.copyOf(row, row.length + 1);
-			rowWithButton[rowWithButton.length - 1] = viewButton;
+			rowWithButton[rowWithButton.length - 1] = "View";
 
 			// Add the row to the table model
 			this.tableModel.addRow(rowWithButton);
@@ -219,7 +243,7 @@ public class AllMemberIdsWindow extends JFrame implements LibWindow {
 				//
 				//
 				JOptionPane.showMessageDialog(button, label + ": Ouch!");
-				// System.out.println(label + ": Ouch!");
+
 			}
 			isPushed = false;
 			return new String(label);
