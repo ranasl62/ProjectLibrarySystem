@@ -2,6 +2,7 @@ package business;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class SystemController implements ControllerInterface {
 		if (!memberMap.containsKey(memberId)) {
 			throw new CheckoutException("Member Id " + memberId + " not found");
 		}
-		
+
 		LibraryMember member = memberMap.get(memberId);
 
 		HashMap<String, Book> bookMap = da.readBooksMap();
@@ -75,6 +76,12 @@ public class SystemController implements ControllerInterface {
 		List<String> retval = new ArrayList<>();
 		retval.addAll(da.readBooksMap().keySet());
 		return retval;
+	}
+
+	@Override
+	public HashMap<String, LibraryMember> readMemberMap() {
+		DataAccess da = new DataAccessFacade();
+		return da.readMemberMap();
 	}
 
 }
