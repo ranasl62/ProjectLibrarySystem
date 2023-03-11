@@ -8,6 +8,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
+import java.util.EventObject;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
@@ -179,6 +180,7 @@ public class AllMemberIdsWindow extends JFrame implements LibWindow {
 		TableColumn actionColumn = this.table.getColumnModel().getColumn(4);
 		actionColumn.setCellRenderer(new ButtonRenderer());
 		actionColumn.setCellEditor(new ButtonEditor(new JCheckBox()));
+		table.setDefaultEditor(Object.class, null);
 	}
 
 	/**
@@ -268,6 +270,7 @@ public class AllMemberIdsWindow extends JFrame implements LibWindow {
 		protected void fireEditingStopped() {
 			super.fireEditingStopped();
 		}
+
 	}
 
 	public void updateList() {

@@ -83,7 +83,7 @@ public class SystemController implements ControllerInterface {
 		DataAccess da = new DataAccessFacade();
 		return da.readMemberMap();
 	}
-	
+
 	public void saveBook(Book book) {
 		DataAccess da = new DataAccessFacade();
 		da.saveBook(book);
@@ -94,4 +94,17 @@ public class SystemController implements ControllerInterface {
 		DataAccess da = new DataAccessFacade();
 		return da.readMemberMap().get(id);
 	}
+
+	@Override
+	public Book readBook(String id) {
+		DataAccess da = new DataAccessFacade();
+		return da.readBooksMap().get(id);
+	}
+
+	@Override
+	public void saveMember(LibraryMember libraryMember) {
+		DataAccess da = new DataAccessFacade();
+		da.saveMember(libraryMember);
+	}
+
 }

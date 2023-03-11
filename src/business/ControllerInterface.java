@@ -24,4 +24,6 @@ public interface ControllerInterface {
 
 	public LibraryMember readMember(String id);
 
+	public Book readBook(String id);
+
 }
