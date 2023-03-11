@@ -20,6 +20,14 @@ final public class CheckoutRecordEntry implements Serializable {
 	public LocalDate getDueDate() {
 		return dueDate;
 	}
+	
+	public BookCopy getBookCopy() {
+		return copy;
+	}
+	
+	public LocalDate getCheckoutDate() {
+		return checkoutDate;
+	}
 
 	public void checkout(BookCopy copy, LocalDate todaysDate, LocalDate todayPlusCheckoutLength)
 			throws CheckoutException {

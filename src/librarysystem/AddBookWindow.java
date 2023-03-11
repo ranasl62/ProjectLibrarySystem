@@ -179,6 +179,12 @@ public class AddBookWindow extends JFrame implements LibWindow {
 			timer.setRepeats(false);
 			timer.start();
 			System.out.println(ci.allBookIds());
+			AllBookIdsWindow.INSTANCE.init();
+			AllBookIdsWindow.INSTANCE.setData();
+			AllBookIdsWindow.INSTANCE.setVisible(true);
+			AddBookWindow.INSTANCE.setVisible(false);
+			repaint();
+
 		} catch (BookException e) {
 			JOptionPane.showMessageDialog(AddBookWindow.this, e.getMessage());
 		}

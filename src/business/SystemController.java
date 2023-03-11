@@ -109,5 +109,21 @@ public class SystemController implements ControllerInterface {
 		DataAccess da = new DataAccessFacade();
 		return da.readBooksMap();
 	}
+	@Override
+	public void saveBook(Book book) {
+		DataAccess da = new DataAccessFacade();
+		da.saveBook(book);
+	}
 
+	@Override
+	public LibraryMember readMember(String id) {
+		DataAccess da = new DataAccessFacade();
+		return da.readMemberMap().get(id);
+	}
+
+	@Override
+	public void saveMember(LibraryMember libraryMember) throws AddMemberWindowException {
+		DataAccess da = new DataAccessFacade();
+		da.saveMember(libraryMember);
+	}
 }

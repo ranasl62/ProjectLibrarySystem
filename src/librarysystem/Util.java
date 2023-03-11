@@ -4,14 +4,20 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.Toolkit;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+
+import business.LibraryMember;
 
 public class Util {
 	public static final Color DARK_BLUE = Color.BLUE.darker();
@@ -88,5 +94,30 @@ public class Util {
 		// Create a JScrollPane to contain the JTable
 		JScrollPane scrollPane = new JScrollPane(table);
 		return scrollPane;
+	}
+	
+	public static Object[][] memberMap(Set<Entry<String,LibraryMember>> set){
+		List<Map.Entry<String, LibraryMember>> members = new ArrayList<>(set);
+
+		Collections.sort(members, new Comparator<Map.Entry<String, LibraryMember>>() {
+			@Override
+			public int compare(Entry<String, LibraryMember> o1, Entry<String, LibraryMember> o2) {
+				return o1.getKey().compareTo(o2.getKey());
+			}
+		});
+
+		Object[][] object = new Object[members.size()][4];
+
+		int i = 0;
+		for (Map.Entry<String, LibraryMember> entry : members) {
+			LibraryMember lm = entry.getValue();
+			System.out.print(lm);
+			object[i][0] = entry.getKey();
+			object[i][1] = lm.getFirstName() + " " + lm.getLastName();
+			object[i][2] = lm.getTelephone();
+			object[i][3] = lm.getAddress().getCity() + " - " + lm.getAddress().getZip();
+			i++;
+		}
+		return object;
 	}
 }

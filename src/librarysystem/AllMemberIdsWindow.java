@@ -66,8 +66,9 @@ public class AllMemberIdsWindow extends JFrame implements LibWindow {
 
 	public void defineTopPanel() {
 
+		setTitle("Member List");
 		topPanel = new JPanel();
-		JLabel AllIDsLabel = new JLabel("Member List");
+		JLabel AllIDsLabel = new JLabel("");
 		Font labelFont = AllIDsLabel.getFont();
 		AllIDsLabel.setFont(new Font(labelFont.getName(), Font.PLAIN, 18));
 
@@ -82,8 +83,10 @@ public class AllMemberIdsWindow extends JFrame implements LibWindow {
 		topPanel.add(label, BorderLayout.NORTH);
 
 		JButton addMemberButton = new JButton("Add Member");
-		if(SystemController.currentAuth == null || SystemController.currentAuth == Auth.LIBRARIAN) {
+		if (SystemController.currentAuth == null || SystemController.currentAuth == Auth.LIBRARIAN) {
+			System.out.println(SystemController.currentAuth + "okay");
 			addMemberButton.setEnabled(false);
+			repaint();
 		}
 
 		JPanel buttonPanel = new JPanel();
@@ -104,7 +107,7 @@ public class AllMemberIdsWindow extends JFrame implements LibWindow {
 			AddMemberWindow.INSTANCE.setVisible(true);
 			System.out.println("Member");
 		});
-	}	
+	}
 
 	public void defineMiddlePanel() {
 
@@ -202,6 +205,7 @@ public class AllMemberIdsWindow extends JFrame implements LibWindow {
 			setText((value == null) ? "" : value.toString());
 			return this;
 		}
+
 	}
 
 	/**
@@ -221,9 +225,19 @@ public class AllMemberIdsWindow extends JFrame implements LibWindow {
 			button.setOpaque(true);
 			button.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					int row = table.getSelectedRow();
+					if (row >= 0) {
+						String id = (String) table.getValueAt(row, 0);
+						LibrarySystem.hideAllWindows();
+						MemberCheckoutHistoryWindow.INSTANCE.setId(id);
+						MemberCheckoutHistoryWindow.INSTANCE.init();
+						Util.centerFrameOnDesktop(MemberCheckoutHistoryWindow.INSTANCE);
+						MemberCheckoutHistoryWindow.INSTANCE.setVisible(true);
+					}
 					fireEditingStopped();
 				}
 			});
+			System.out.print("ButtonEditor");
 		}
 
 		public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row,
@@ -242,12 +256,6 @@ public class AllMemberIdsWindow extends JFrame implements LibWindow {
 		}
 
 		public Object getCellEditorValue() {
-			if (isPushed) {
-				//
-				//
-				JOptionPane.showMessageDialog(button, label + ": Ouch!");
-
-			}
 			isPushed = false;
 			return new String(label);
 		}
@@ -260,6 +268,11 @@ public class AllMemberIdsWindow extends JFrame implements LibWindow {
 		protected void fireEditingStopped() {
 			super.fireEditingStopped();
 		}
+	}
+
+	public void updateList() {
+		// TODO Auto-generated method stub
+
 	}
 
 }
