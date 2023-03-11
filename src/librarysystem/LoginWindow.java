@@ -160,7 +160,7 @@ public class LoginWindow extends JFrame implements LibWindow {
 		username = new JTextField(10);
 		label = new JLabel("Username");
 		label.setFont(Util.makeSmallFont(label.getFont()));
-		topText.add(username);
+		topText.add(username);	
 		bottomText.add(label);
 
 		leftTextPanel = new JPanel();
@@ -205,8 +205,8 @@ public class LoginWindow extends JFrame implements LibWindow {
 
 	private void addLoginButtonListener(JButton butn) {
 		butn.addActionListener(evt -> {
-			String user = username.getText();
-			String pass = password.getText();
+			String user = getUsername();
+			String pass = getPassword();
 			try {
 				RuleSet rules = RuleSetFactory.getRuleSet(LoginWindow.this);
 				rules.applyRules(LoginWindow.this);
@@ -227,6 +227,8 @@ public class LoginWindow extends JFrame implements LibWindow {
 			Timer timer = new javax.swing.Timer(500, (ActionListener) new ActionListener() {
 	            public void actionPerformed(ActionEvent e) {
 	            	LoginWindow.INSTANCE.setVisible(false);
+	            	dispose();
+	            	revalidate();
 	            }
 	        });
 	        timer.setRepeats(false);

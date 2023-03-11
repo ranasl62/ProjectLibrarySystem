@@ -29,7 +29,7 @@ public class LibrarySystem extends JFrame implements LibWindow {
 	JPanel mainPanel;
 	JMenuBar menuBar;
     JMenu options;
-    MenuItem login, allBookIds, allMemberIds; 
+    MenuItem login, allBookIds, allMemberIds, checkoutABook; 
     String pathToImage;
     private boolean isInitialized = false;
     
@@ -94,9 +94,12 @@ public class LibrarySystem extends JFrame implements LibWindow {
  	   allBookIds.getItem().addActionListener(new AllBookIdsListener());
  	   allMemberIds = new MenuItem("All Member Ids", Auth.BOTH, false);
  	   allMemberIds.getItem().addActionListener(new AllMemberIdsListener());
+ 	   checkoutABook = new MenuItem("Checkout a Book", Auth.LIBRARIAN, false);
+ 	   checkoutABook.getItem().addActionListener(new CheckoutABookListener());
  	   options.add(login.getItem());
  	   options.add(allBookIds.getItem());
  	   options.add(allMemberIds.getItem());
+ 	   options.add(checkoutABook.getItem());
     }
     
     class LoginListener implements ActionListener {
@@ -166,10 +169,25 @@ public class LibrarySystem extends JFrame implements LibWindow {
     	
     }
     
+    class CheckoutABookListener implements ActionListener {
+
+    	@Override
+		public void actionPerformed(ActionEvent e) {
+    		LibrarySystem.hideAllWindows();
+    		CheckoutABookWindow.INSTANCE.init();
+//			CheckoutABookWindow.INSTANCE.pack();
+			Util.centerFrameOnDesktop(CheckoutABookWindow.INSTANCE);
+			CheckoutABookWindow.INSTANCE.setVisible(true);
+			
+		}
+    	
+    }
+    
 	void updateList() {
 		login.setHighlight(SystemController.currentAuth);
 		allBookIds.setHighlight(SystemController.currentAuth);
 		allMemberIds.setHighlight(SystemController.currentAuth);
+		checkoutABook.setHighlight(SystemController.currentAuth);
 		repaint();
 	}
 
