@@ -85,10 +85,8 @@ public class SystemController implements ControllerInterface {
 	}
 
 	@Override
-	public void saveMember(LibraryMember libraryMember) {
+	public LibraryMember readMember(String id) {
 		DataAccess da = new DataAccessFacade();
-		da.saveMember(libraryMember);
+		return da.readMemberMap().get(id);
 	}
-		
-
 }

@@ -8,16 +8,18 @@ import dataaccess.DataAccess;
 import dataaccess.DataAccessFacade;
 
 public interface ControllerInterface {
-    public void login(String id, String password) throws LoginException;
+	public void login(String id, String password) throws LoginException;
 
-    public void checkoutBook(String memberId, String isbn) throws CheckoutException;
+	public void checkoutBook(String memberId, String isbn) throws CheckoutException;
 
-    public List<String> allMemberIds();
+	public List<String> allMemberIds();
 
-    public List<String> allBookIds();
+	public List<String> allBookIds();
 
 	public HashMap<String, LibraryMember> readMemberMap();
 
-	public void saveMember(LibraryMember libraryMember)	throws AddMemberWindowException;
+	public void saveMember(LibraryMember libraryMember) throws AddMemberWindowException;
+
+	public LibraryMember readMember(String id);
 
 }
