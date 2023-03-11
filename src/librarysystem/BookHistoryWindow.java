@@ -139,7 +139,7 @@ public class BookHistoryWindow extends JFrame implements LibWindow {
 		this.tableModel.setRowCount(0);
 		this.tableModel.setColumnCount(0);
 		// Add columns to the table model
-		Object[] columnNames = { "Member", "Copy No.", "Checkout Date", "Due Date" };
+		Object[] columnNames = { "Member", "Copy No.", "Checkout Date", "Due Date", "Expire" };
 		for (Object columnName : columnNames) {
 			this.tableModel.addColumn(columnName);
 		}
@@ -147,27 +147,14 @@ public class BookHistoryWindow extends JFrame implements LibWindow {
 		for (LibraryMember libMem : this.libraryMember) {
 
 			try {
+				int i = 0;
 				for (CheckoutRecordEntry cre : libMem.getEntries()) {
 					try {
 						if (this.book.getIsbn().equals(cre.getBookCopy().getBook().getIsbn())
 								&& !cre.getBookCopy().isAvailable()) {
 							Object[] obj = { libMem.getFirstName() + " " + libMem.getLastName(),
-									cre.getBookCopy().getCopyNum(), cre.getCheckoutDate(), cre.getDueDate() };
+									cre.getBookCopy().getCopyNum(), cre.getCheckoutDate(), cre.getDueDate(), cre.getDueDate().isBefore(LocalDate.now())? "Yes" :"No" };
 							this.tableModel.addRow(obj);
-
-							this.tableModel.addRow(obj);
-
-							if (cre.getDueDate().isBefore(LocalDate.now())) {
-								// Get the index of the newly added row
-								int rowIndex = this.tableModel.getRowCount() - 1;
-								Color rowColor = Color.ORANGE;
-								TableCellRenderer cellRenderer = new CustomTableCellRenderer(rowIndex, rowColor);
-
-								for (int i = 0; i < table.getColumnCount(); i++) {
-									table.getColumnModel().getColumn(i).setCellRenderer(cellRenderer);
-								}
-							}
-							// Set the color of the newly added row
 
 						}
 					} catch (Exception e) {
@@ -180,30 +167,6 @@ public class BookHistoryWindow extends JFrame implements LibWindow {
 		}
 	}
 
-	public class CustomTableCellRenderer extends DefaultTableCellRenderer {
-		private final int rowIndex;
-		private final Color rowColor;
-
-		public CustomTableCellRenderer(int rowIndex, Color rowColor) {
-			this.rowIndex = rowIndex;
-			this.rowColor = rowColor;
-		}
-
-		@Override
-		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-				int row, int column) {
-			Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-
-			// Check the row index and set the background color accordingly
-			if (row == rowIndex) {
-				component.setBackground(rowColor);
-			} else {
-				component.setBackground(table.getBackground());
-			}
-
-			return component;
-		}
-	}
 
 	public void updateList() {
 		// TODO Auto-generated method stub
