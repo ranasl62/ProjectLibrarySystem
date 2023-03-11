@@ -1,17 +1,26 @@
 package librarysystem;
 
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.Timer;
 
+import business.AddMemberWindowException;
+import business.Address;
 import business.ControllerInterface;
+import business.LibraryMember;
+import business.LoginException;
 import business.SystemController;
 
 @SuppressWarnings("serial")
@@ -110,6 +119,11 @@ public class AddMemberWindow extends JFrame implements LibWindow {
 		// add the button to the last row
 		JButton addButton = new JButton("Add");
 		JPanel buttonPanel = new JPanel();
+		
+		JButton backButton = new JButton("Back");
+		addBackButtonListener(backButton);
+		buttonPanel.add(backButton);
+		
 		buttonPanel.add(addButton);
 		panel.add(new JPanel());
 		panel.add(new JPanel());
@@ -126,14 +140,93 @@ public class AddMemberWindow extends JFrame implements LibWindow {
 		setVisible(true);
 
 	}
+	
+	private void addBackButtonListener(JButton butn) {
+		butn.addActionListener(evt -> {
+			LibrarySystem.hideAllWindows();
+			AllMemberIdsWindow.INSTANCE.setVisible(true);
+		});
+	}
 
 	void addMemberListener(JButton buttonPanel) {
 		buttonPanel.addActionListener(evt -> {
-			LibrarySystem.hideAllWindows();
-			AllMemberIdsWindow.INSTANCE.init();
-			Util.centerFrameOnDesktop(AllMemberIdsWindow.INSTANCE);
-			AllMemberIdsWindow.INSTANCE.setVisible(true);
-			System.out.println("AllMemberIdsWindow");
+			try {
+				LibrarySystem.hideAllWindows();
+				AllMemberIdsWindow.INSTANCE.init();
+				Util.centerFrameOnDesktop(AllMemberIdsWindow.INSTANCE);
+				AllMemberIdsWindow.INSTANCE.setVisible(true);
+				System.out.println("AllMemberIdsWindow");
+
+				Address address = new Address(stateField.getText(), cityField.getText(), streetField.getText(),
+						zipField.getText());
+
+				LibraryMember libraryMember = new LibraryMember(memberIdField.getText(), firstNameField.getText(),
+						lastNameField.getText(), telephoneField.getText(), address);
+				ci.saveMember(libraryMember);
+				String output = "Member add successfully";
+				clearFields();
+				JOptionPane.showMessageDialog(AllMemberIdsWindow.INSTANCE, output);
+				Timer timer = new javax.swing.Timer(500, (ActionListener) new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						AddMemberWindow.INSTANCE.setVisible(false);
+						dispose();
+						revalidate();
+					}
+				});
+				timer.setRepeats(false);
+				timer.start();
+				AllMemberIdsWindow.INSTANCE.setVisible(true);
+				AllMemberIdsWindow.INSTANCE.setData(Util.memberMap(ci.readMemberMap().entrySet()));
+			} catch (AddMemberWindowException e) {
+				JOptionPane.showMessageDialog(AddMemberWindow.this, e.getMessage());
+			}
+
 		});
+
 	}
+
+	private void clearFields() {
+		memberIdField.setText("");
+		firstNameField.setText("");
+		lastNameField.setText("");
+		streetField.setText("");
+		cityField.setText("");
+		stateField.setText("");
+		zipField.setText("");
+		telephoneField.setText("");
+
+	}
+
+	public String getMemberIdFieldText() {
+		return memberIdField.getText();
+	}
+
+	public String getFirstNameFieldText() {
+		return firstNameField.getText();
+	}
+
+	public String getLastNameFieldText() {
+		return lastNameField.getText();
+	}
+
+	public String getStreetFieldText() {
+		return streetField.getText();
+	}
+
+	public String getCityFieldText() {
+		return cityField.getText();
+	}
+
+	public String getStateFieldText() {
+		return stateField.getText();
+	}
+
+	public String getZipFieldText() {
+		return zipField.getText();
+	}
+
+	public String getTelephoneFieldText() {
+		return telephoneField.getText();
+	}
+
 }

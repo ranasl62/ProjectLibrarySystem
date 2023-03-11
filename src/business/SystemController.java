@@ -89,4 +89,11 @@ public class SystemController implements ControllerInterface {
 		da.saveBook(book);
 	}
 
+	@Override
+	public void saveMember(LibraryMember libraryMember) {
+		DataAccess da = new DataAccessFacade();
+		da.saveMember(libraryMember);
+	}
+		
+
 }

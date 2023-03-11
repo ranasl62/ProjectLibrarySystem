@@ -20,4 +20,6 @@ public interface ControllerInterface {
 	
 	public void saveBook(Book book);
 
+	public void saveMember(LibraryMember libraryMember)	throws AddMemberWindowException;
+
 }
