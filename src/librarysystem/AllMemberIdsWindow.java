@@ -65,9 +65,10 @@ public class AllMemberIdsWindow extends JFrame implements LibWindow {
 	}
 
 	public void defineTopPanel() {
-
+		
+		setTitle("Member List");
 		topPanel = new JPanel();
-		JLabel AllIDsLabel = new JLabel("Member List");
+		JLabel AllIDsLabel = new JLabel("");
 		Font labelFont = AllIDsLabel.getFont();
 		AllIDsLabel.setFont(new Font(labelFont.getName(), Font.PLAIN, 18));
 
@@ -82,8 +83,10 @@ public class AllMemberIdsWindow extends JFrame implements LibWindow {
 		topPanel.add(label, BorderLayout.NORTH);
 
 		JButton addMemberButton = new JButton("Add Member");
-		if(SystemController.currentAuth == null || SystemController.currentAuth == Auth.LIBRARIAN) {
+		if (SystemController.currentAuth == null || SystemController.currentAuth == Auth.LIBRARIAN) {
+			System.out.println(SystemController.currentAuth + "okay");
 			addMemberButton.setEnabled(false);
+			repaint();
 		}
 
 		JPanel buttonPanel = new JPanel();
@@ -264,7 +267,7 @@ public class AllMemberIdsWindow extends JFrame implements LibWindow {
 
 	public void updateList() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }
