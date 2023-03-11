@@ -217,7 +217,7 @@ public class LoginWindow extends JFrame implements LibWindow {
 
 		});
 	}
-	
+
 	private void login(String user, String pass) {
 		try {
 			ci.login(user, pass);
@@ -225,12 +225,12 @@ public class LoginWindow extends JFrame implements LibWindow {
 			clearFields();
 			JOptionPane.showMessageDialog(this, output);
 			Timer timer = new javax.swing.Timer(500, (ActionListener) new ActionListener() {
-	            public void actionPerformed(ActionEvent e) {
-	            	LoginWindow.INSTANCE.setVisible(false);
-	            }
-	        });
-	        timer.setRepeats(false);
-	        timer.start();
+				public void actionPerformed(ActionEvent e) {
+					LoginWindow.INSTANCE.setVisible(false);
+				}
+			});
+			timer.setRepeats(false);
+			timer.start();
 			LibrarySystem.INSTANCE.setVisible(true);
 			LibrarySystem.INSTANCE.updateList();
 		} catch (LoginException e) {
