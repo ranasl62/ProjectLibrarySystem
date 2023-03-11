@@ -83,5 +83,10 @@ public class SystemController implements ControllerInterface {
 		DataAccess da = new DataAccessFacade();
 		return da.readMemberMap();
 	}
+	
+	public void saveBook(Book book) {
+		DataAccess da = new DataAccessFacade();
+		da.saveBook(book);
+	}
 
 }

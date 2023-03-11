@@ -17,5 +17,7 @@ public interface ControllerInterface {
     public List<String> allBookIds();
 
 	public HashMap<String, LibraryMember> readMemberMap();
+	
+	public void saveBook(Book book);
 
 }
