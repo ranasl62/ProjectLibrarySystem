@@ -84,4 +84,11 @@ public class SystemController implements ControllerInterface {
 		return da.readMemberMap();
 	}
 
+	@Override
+	public void saveMember(LibraryMember libraryMember) {
+		DataAccess da = new DataAccessFacade();
+		da.saveMember(libraryMember);
+	}
+		
+
 }

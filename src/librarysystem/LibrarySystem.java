@@ -155,30 +155,8 @@ public class LibrarySystem extends JFrame implements LibWindow {
 
 			LibrarySystem.hideAllWindows();
 			AllBookIdsWindow.INSTANCE.init();
-
-			List<Map.Entry<String, LibraryMember>> members = new ArrayList<>(ci.readMemberMap().entrySet());
-
-			Collections.sort(members, new Comparator<Map.Entry<String, LibraryMember>>() {
-				@Override
-				public int compare(Entry<String, LibraryMember> o1, Entry<String, LibraryMember> o2) {
-					return o1.getKey().compareTo(o2.getKey());
-				}
-			});
-
-			Object[][] object = new Object[members.size()][4];
-
-			int i = 0;
-			for (Map.Entry<String, LibraryMember> entry : members) {
-				LibraryMember lm = entry.getValue();
-				System.out.print(lm);
-				object[i][0] = entry.getKey();
-				object[i][1] = lm.getFirstName() + " " + lm.getLastName();
-				object[i][2] = lm.getTelephone();
-				object[i][3] = lm.getAddress().getCity() + " - " + lm.getAddress().getZip();
-				i++;
-			}
-
-			AllMemberIdsWindow.INSTANCE.setData(object);
+			
+			AllMemberIdsWindow.INSTANCE.setData(Util.memberMap(ci.readMemberMap().entrySet()));
 			AllMemberIdsWindow.INSTANCE.pack();
 			// AllMemberIdsWindow.INSTANCE.setSize(660,500);
 			Util.centerFrameOnDesktop(AllMemberIdsWindow.INSTANCE);

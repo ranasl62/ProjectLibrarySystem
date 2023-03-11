@@ -18,4 +18,6 @@ public interface ControllerInterface {
 
 	public HashMap<String, LibraryMember> readMemberMap();
 
+	public void saveMember(LibraryMember libraryMember)	throws AddMemberWindowException;
+
 }

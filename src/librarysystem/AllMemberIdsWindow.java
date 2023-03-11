@@ -100,7 +100,7 @@ public class AllMemberIdsWindow extends JFrame implements LibWindow {
 			AddMemberWindow.INSTANCE.setVisible(true);
 			System.out.println("Member");
 		});
-	}	
+	}
 
 	public void defineMiddlePanel() {
 
@@ -257,6 +257,11 @@ public class AllMemberIdsWindow extends JFrame implements LibWindow {
 		protected void fireEditingStopped() {
 			super.fireEditingStopped();
 		}
+	}
+
+	public void updateList() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
